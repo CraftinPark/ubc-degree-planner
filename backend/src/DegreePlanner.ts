@@ -1,0 +1,5 @@
+class DegreePlanner {
+    constructor() {}
+
+    checkPrerequisites() {}
+}
