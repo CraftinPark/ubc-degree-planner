@@ -39,7 +39,10 @@ let degreePlanner = new DegreePlanner();
 let myEnrolledCourses = [
     new PlannedCourse(courses[0], 1),
     new PlannedCourse(courses[1], 2),
+    new PlannedCourse(courses[2], 2),
+    new PlannedCourse(courses[3], 3),
 ];
-
+// console.log(myEnrolledCourses);
 // myEnrolledCourses should be valid. Return array
 degreePlanner.checkPrerequisitesMet(myEnrolledCourses);
+// console.log(myEnrolledCourses);

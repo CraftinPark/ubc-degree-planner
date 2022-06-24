@@ -1,13 +1,13 @@
 export class Course {
-    private code: string;
-    private name: string;
-    private desc: string;
-    private cred: number;
-    private preq: any;
-    private creq: any;
-    private excl: any;
-    private eqvl: any;
-    private crdf: Boolean;
+    public code: string;
+    public name: string;
+    public desc: string;
+    public cred: number;
+    public preq: any;
+    public creq: any;
+    public excl: any;
+    public eqvl: any;
+    public crdf: Boolean;
 
     constructor(code: string) {
         this.code = code;
@@ -33,7 +33,7 @@ export class Course {
                 this.cred = parseInt(value);
                 break;
             case "preq":
-                this.preq = value;
+                if (value) this.preq = JSON.parse(value);
                 break;
             case "creq":
                 this.creq = value;
@@ -52,9 +52,9 @@ export class Course {
 }
 
 export class PlannedCourse {
-    private course: Course;
-    private term: number;
-    private prerequisitiesMet: boolean;
+    public course: Course;
+    public term: number;
+    public prerequisitiesMet: boolean;
 
     constructor(course: Course, term: number) {
         this.course = course;
