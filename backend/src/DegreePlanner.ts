@@ -1,5 +1,7 @@
-class DegreePlanner {
+import { PlannedCourse } from "./Course";
+
+export default class DegreePlanner {
     constructor() {}
 
-    checkPrerequisites() {}
+    checkPrerequisitesMet(plannedCourses: PlannedCourse[]): void {}
 }

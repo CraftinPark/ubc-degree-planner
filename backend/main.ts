@@ -14,7 +14,7 @@ app.listen(port, () => {
 });
 
 const MOCK_LIST = __dirname + "/../mock-list.txt";
-import Course from "./src/Course";
+import { Course, PlannedCourse } from "./src/Course";
 
 let file = fs.readFileSync(MOCK_LIST, "utf-8");
 let courses = [];
@@ -31,4 +31,15 @@ for (let line of file.toString().split("\n")) {
         course.setAttribute(attribute, value);
     }
 }
-console.log(courses);
+
+import DegreePlanner from "./src/degreePlanner";
+
+let degreePlanner = new DegreePlanner();
+
+let myEnrolledCourses = [
+    new PlannedCourse(courses[0], 1),
+    new PlannedCourse(courses[1], 2),
+];
+
+// myEnrolledCourses should be valid. Return array
+degreePlanner.checkPrerequisitesMet(myEnrolledCourses);

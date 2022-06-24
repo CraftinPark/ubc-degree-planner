@@ -1,4 +1,4 @@
-export default class Course {
+export class Course {
     private code: string;
     private name: string;
     private desc: string;
@@ -48,5 +48,17 @@ export default class Course {
                 this.crdf = value == "true";
                 break;
         }
+    }
+}
+
+export class PlannedCourse {
+    private course: Course;
+    private term: number;
+    private prerequisitiesMet: boolean;
+
+    constructor(course: Course, term: number) {
+        this.course = course;
+        this.term = term;
+        this.prerequisitiesMet = false;
     }
 }
