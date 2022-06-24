@@ -1,70 +1,56 @@
-import { Course, PlannedCourse } from "./Course";
+import { PlannedCourse } from "./Course";
 
 export default class DegreePlanner {
     constructor() {}
 
-    checkPrerequisitesMet(plannedCourses: PlannedCourse[]): void {
-        for (let plannedCourse of plannedCourses) {
-            if (this.isPrerequisiteMet(plannedCourse, plannedCourses)) {
+    public checkPrerequisitesMet(plannedCourses: PlannedCourse[]): void {
+        for (let plannedCourse of plannedCourses)
+            if (this.isPrerequisiteMet(plannedCourse, plannedCourses))
                 plannedCourse.prerequisitiesMet = true;
-            }
-        }
     }
 
-    isPrerequisiteMet(
-        course: PlannedCourse,
-        plannedCourses: PlannedCourse[]
-    ): boolean {
-        let beforeCourses = this.getCoursesBeforeTerm(
-            course.term,
-            plannedCourses
-        );
+    private isPrerequisiteMet(course: PlannedCourse, plannedCourses: PlannedCourse[]): boolean {
+        let beforeCourses = this.getPrevCourses(course.term, plannedCourses);
         return this.isConditionMet(course.course.preq, beforeCourses);
     }
 
-    isConditionMet(
-        preq: string[] | string,
-        coursesBefore: PlannedCourse[]
-    ): boolean {
+    private getPrevCourses(term: number, plannedCourses: PlannedCourse[]): PlannedCourse[] {
+        let prevCourses = [];
+        for (let plannedCourse of plannedCourses)
+            if (plannedCourse.term < term) prevCourses.push(plannedCourse);
+        return prevCourses;
+    }
+
+    private isConditionMet(preq: string[] | string, prevCourses: PlannedCourse[]): boolean {
         let fulfilled = false;
         if (typeof preq === "string") {
-            console.log("courses before:");
-            console.log(coursesBefore);
-            if (
-                coursesBefore.filter(
-                    (e: PlannedCourse) =>
-                        e.course.code === preq &&
-                        this.isPrerequisiteMet(e, coursesBefore)
-                ).length !== 0
-            ) {
-                fulfilled = true;
-            }
-        } else if (preq.length === 0) {
-            fulfilled = true;
-        } else if (preq[0] === "or") {
-            fulfilled = preq
-                .slice(1)
-                .some((condition: any) =>
-                    this.isConditionMet(condition, coursesBefore)
-                );
-        } else if (preq[0] === "and") {
-            fulfilled = preq
-                .slice(1)
-                .every((condition: any) =>
-                    this.isConditionMet(condition, coursesBefore)
-                );
+            if (this.isCourseFulfilled(preq, prevCourses)) fulfilled = true;
+        } else {
+            let remainingParams = preq.slice(1);
+            if (preq.length === 0) fulfilled = true;
+            else if (preq[0] === "or")
+                fulfilled = this.oneCourseMetCondition(remainingParams, prevCourses);
+            else if (preq[0] === "and")
+                fulfilled = this.allCoursesMetCondition(remainingParams, prevCourses);
         }
         return fulfilled;
     }
 
-    getCoursesBeforeTerm(
-        term: number,
-        plannedCourses: PlannedCourse[]
-    ): PlannedCourse[] {
-        let coursesBefore = [];
-        for (let plannedCourse of plannedCourses) {
-            if (plannedCourse.term < term) coursesBefore.push(plannedCourse);
-        }
-        return coursesBefore;
+    private isCourseFulfilled(code: string, prevCourses: PlannedCourse[]): boolean {
+        return (
+            prevCourses.filter(
+                (prevCourse: PlannedCourse) =>
+                    prevCourse.course.code === code &&
+                    this.isPrerequisiteMet(prevCourse, prevCourses)
+            ).length !== 0
+        );
+    }
+
+    private oneCourseMetCondition(params: string[], prevCourses: PlannedCourse[]): boolean {
+        return params.some((cond: string[] | string) => this.isConditionMet(cond, prevCourses));
+    }
+
+    private allCoursesMetCondition(params: string[], prevCourses: PlannedCourse[]): boolean {
+        return params.every((cond: string[] | string) => this.isConditionMet(cond, prevCourses));
     }
 }
