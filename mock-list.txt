@@ -6,7 +6,7 @@ preq:
 creq: 
 excl: CPSC 107
 eqvl: 
-crdf: True
+crdf: true
 
 code: CPSC 121
 name: Models of Computation
@@ -16,7 +16,7 @@ preq:
 creq: CPSC 107 or CPSC 110
 excl: CPEN 211
 eqvl: 
-crdf: True
+crdf: true
 
 code: CPSC 210
 name: Software Construction
@@ -26,7 +26,7 @@ preq: CPSC 107 or CPSC 110
 creq: 
 excl: CPEN 221
 eqvl: 
-crdf: True
+crdf: true
 
 code: CPSC 213
 name: Introduction to Computer Systems
@@ -36,4 +36,4 @@ preq: CPSC 121 and CPSC 210
 creq: 
 excl: CPSC 261, CPEN 212
 eqvl: 
-crdf: True
+crdf: true
