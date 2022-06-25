@@ -1,20 +1,10 @@
 import { useEffect, useState } from "react";
 import { Course } from "./utils/Course";
-import YearCourseSelector from "./components/YearCourseSelector";
+import TermCourseSelector from "./components/TermCourseSelector";
 
 function App() {
   const [availableCourses, setAvailableCourses] = useState([]);
-  const [selectedCourses, setSelectedCourses] = useState<{
-    firstYear: Course[];
-    secondYear: Course[];
-    thirdYear: Course[];
-    fourthYear: Course[];
-  }>({
-    firstYear: [],
-    secondYear: [],
-    thirdYear: [],
-    fourthYear: [],
-  });
+  const [termSelectedCourses, setTermSelectedCourses] = useState<Course[][]>([[], [], [], []]);
 
   useEffect(() => {
     async function fetchCourses() {
@@ -25,61 +15,38 @@ function App() {
     fetchCourses();
   }, []);
 
-  useEffect(() => {
-    console.log(selectedCourses);
-  }, [selectedCourses]);
-
-  const addCourseToFirstYear = (course: Course) => {
-    setSelectedCourses((prev) => ({ ...prev, firstYear: [...prev.firstYear, course] }));
+  const renderTerms = () => {
+    return termSelectedCourses.map((termCourses, term) => {
+      return (
+        <div key={term}>
+          <h5>Term {term + 1}</h5>
+          {renderTermCourses(term)}
+          <TermCourseSelector
+            termCourses={termCourses}
+            addTermCourse={(course: Course) => {
+              setTermSelectedCourses((prev) => {
+                let termSelectedCourses = [...prev];
+                termSelectedCourses[term] = [...prev[term], course];
+                return termSelectedCourses;
+              });
+            }}
+            availableCourses={availableCourses}
+          />
+        </div>
+      );
+    });
   };
 
-  const addCourseToSecondYear = (course: Course) => {
-    setSelectedCourses((prev) => ({ ...prev, secondYear: [...prev.secondYear, course] }));
-  };
-
-  const addCourseToThirdYear = (course: Course) => {
-    setSelectedCourses((prev) => ({ ...prev, thirdYear: [...prev.thirdYear, course] }));
-  };
-
-  const addCourseToFourthYear = (course: Course) => {
-    setSelectedCourses((prev) => ({ ...prev, fourthYear: [...prev.fourthYear, course] }));
+  const renderTermCourses = (term: number) => {
+    return termSelectedCourses[term].map((course) => (
+      <div key={`${term}-${course.code}`}>{course.code}</div>
+    ));
   };
 
   return (
     <div className="App">
       <h1>ubc-degree-planner</h1>
-      {selectedCourses.firstYear.map((course) => (
-        <div>{course.code}</div>
-      ))}
-      <YearCourseSelector
-        yearCourses={selectedCourses.firstYear}
-        addYearCourse={addCourseToFirstYear}
-        availableCourses={availableCourses}
-      />
-      {selectedCourses.secondYear.map((course) => (
-        <div>{course.code}</div>
-      ))}
-      <YearCourseSelector
-        yearCourses={selectedCourses.secondYear}
-        addYearCourse={addCourseToSecondYear}
-        availableCourses={availableCourses}
-      />
-      {selectedCourses.thirdYear.map((course) => (
-        <div>{course.code}</div>
-      ))}
-      <YearCourseSelector
-        yearCourses={selectedCourses.thirdYear}
-        addYearCourse={addCourseToThirdYear}
-        availableCourses={availableCourses}
-      />
-      {selectedCourses.fourthYear.map((course) => (
-        <div>{course.code}</div>
-      ))}
-      <YearCourseSelector
-        yearCourses={selectedCourses.fourthYear}
-        addYearCourse={addCourseToFourthYear}
-        availableCourses={availableCourses}
-      />
+      {renderTerms()}
     </div>
   );
 }
