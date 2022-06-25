@@ -7,17 +7,10 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT;
 
-app.get("/", (req: Request, res: Response) => {});
-
-app.listen(port, () => {
-    console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
-});
-
 const MOCK_LIST = __dirname + "/../mock-list.txt";
 import { Course, PlannedCourse } from "./src/Course";
-
 let file = fs.readFileSync(MOCK_LIST, "utf-8");
-let courses = [];
+let courses: Course[] = [];
 let course;
 for (let line of file.toString().split("\n")) {
     let parts = line.split(":");
@@ -31,6 +24,18 @@ for (let line of file.toString().split("\n")) {
         course.setAttribute(attribute, value);
     }
 }
+
+app.get("/", (req, res) => {
+    res.send("Hello World!");
+});
+
+app.get("/courses", (req: Request, res: Response) => {
+    res.send(courses);
+});
+
+app.listen(port, () => {
+    console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
+});
 
 import DegreePlanner from "./src/degreePlanner";
 
