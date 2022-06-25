@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Course } from "./utils/Course";
-import YearCourseSelector from "./YearCourseSelector";
+import YearCourseSelector from "./components/YearCourseSelector";
 
 function App() {
   const [availableCourses, setAvailableCourses] = useState([]);

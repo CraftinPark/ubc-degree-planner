@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Course } from "./utils/Course";
+import { Course } from "../utils/Course";
 
 interface YearCourseSelectorProps {
   yearCourses: Course[];
