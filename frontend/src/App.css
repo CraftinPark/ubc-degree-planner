@@ -1,0 +1,11 @@
+.course {
+    margin: 2px;
+    width: 100px;
+    height: 30px;
+    border-style: solid;
+    border-radius: 3px;
+    border-width: 1px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}

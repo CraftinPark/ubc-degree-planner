@@ -33,6 +33,12 @@ app.get("/courses", (req: Request, res: Response) => {
     res.send(courses);
 });
 
+app.get("/checkPrerequisites", (req: Request, res: Response) => {
+    let payload = req.body;
+    let updatedCourses = degreePlanner.checkPrerequisitesMet(payload);
+    res.send(updatedCourses);
+});
+
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
 });
